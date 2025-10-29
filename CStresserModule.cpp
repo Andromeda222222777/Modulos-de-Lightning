@@ -31,15 +31,14 @@ CStresserModule::CStresserModule() : CModule("Stresser", "Exploit") {
 	DefineConCmd("sc_lightning_stresser", CStresserModule);
 }
 
-void CStresserModule::OnEnable() {									  
+void CStresserModule::OnEnable() {
 	CModule::OnEnable();
-	m_iGameSpeedChargeForCounter = 0;									         
-
+	m_iGameSpeedChargeForCounter = 0;
 //	ORIG_Cbuf_AddText("Hello World!");
 	
 //	ORIG_Cbuf_InsertText("Hello World!");
 
-	CCheat::GetCheat()->m_pEventBus->RegisterListener(this);	 
+	CCheat::GetCheat()->m_pEventBus->RegisterListener(this);
 }
 
 void CStresserModule::OnDisable() {
@@ -48,7 +47,7 @@ void CStresserModule::OnDisable() {
 	*g_pfNextCmdTime = -1.f;
 	m_iGameSpeedChargeForCounter = 0;
 	g_flBaseApplicationSpeed = 1.0f;
-																		  
+	
 	if (g_p_fGameSpeed)
 		*g_p_fGameSpeed = 1.0;
   
@@ -78,34 +77,34 @@ void CStresserModule::OnEvent(_In_ const ISimpleEvent* _Event) {
 	if (_Event->GetType() == EEventType::kUpdateEvent) {
 		auto e = static_cast<const CUpdateEvent*>(_Event);
 
-		if (m_pMode->Get() == 0 /* Time Machine + Game Speed */) {							  
-			if (!g_p_fGameSpeed) return;													  
-																							  
-			if (m_iGameSpeedChargeForCounter < m_pGameSpeedChargeFor->Get()) {				 
-				*g_pfNextCmdTime = FLT_MAX;													  
-				m_iGameSpeedChargeForCounter++;												  
-			}																				 
-			else {																			  
-				*g_pfNextCmdTime = -1.f;													  
-				m_iGameSpeedChargeForCounter = 0;											  
-			}																				  
-			*g_p_fGameSpeed = static_cast<double>(m_pGameSpeed->Get()) * 1000.0;			  
-		} 																					  
+		if (m_pMode->Get() == 0 /* Time Machine + Game Speed */) {
+			if (!g_p_fGameSpeed) return;
+				
+			if (m_iGameSpeedChargeForCounter < m_pGameSpeedChargeFor->Get()) {
+				*g_pfNextCmdTime = FLT_MAX;
+				m_iGameSpeedChargeForCounter++;
+			}
+			else {
+				*g_pfNextCmdTime = -1.f;
+				m_iGameSpeedChargeForCounter = 0;
+			}
+			*g_p_fGameSpeed = static_cast<double>(m_pGameSpeed->Get()) * 1000.0;
+		}
 
-		if (m_pMode->Get() == 1 /* Time Machine + Anarchy Speed */) {					      
-			if (!g_p_fGameSpeed) return;													  
-			g_flBaseApplicationSpeed = m_pAnarchyBaseSpeed->Get();							  
-																							  																							 
-			if (m_iGameSpeedChargeForCounter < m_pAnarchyChargeFor->Get()) {				  
-				*g_pfNextCmdTime = FLT_MAX;													  
-				m_iGameSpeedChargeForCounter++;												  
-			}																				  
-			else {																			  
-				*g_pfNextCmdTime = -1.f;													  
-				m_iGameSpeedChargeForCounter = 0;											  
-			}																				  
-																							  
-			*g_p_fGameSpeed = static_cast<double>(m_pAnarchyGameSpeed->Get()) * 1000.0;		  
+		if (m_pMode->Get() == 1 /* Time Machine + Anarchy Speed */) {
+			if (!g_p_fGameSpeed) return;
+			g_flBaseApplicationSpeed = m_pAnarchyBaseSpeed->Get();
+			
+			if (m_iGameSpeedChargeForCounter < m_pAnarchyChargeFor->Get()) {
+				*g_pfNextCmdTime = FLT_MAX;
+				m_iGameSpeedChargeForCounter++;
+			}
+			else {
+				*g_pfNextCmdTime = -1.f;
+				m_iGameSpeedChargeForCounter = 0;
+			} 
+			
+			*g_p_fGameSpeed = static_cast<double>(m_pAnarchyGameSpeed->Get()) * 1000.0;
 		}
 
 		if (m_pBlockMovements->Get()) {
@@ -135,6 +134,6 @@ void CStresserModule::OnEvent(_In_ const ISimpleEvent* _Event) {
 
 }
 
-const char* CStresserModule::GetTag() {												          
-	return m_pMode->GetModeByIndex(m_pMode->Get());				                              
+const char* CStresserModule::GetTag() {
+	return m_pMode->GetModeByIndex(m_pMode->Get());
 }
